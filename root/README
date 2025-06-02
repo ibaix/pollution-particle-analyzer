@@ -1,0 +1,70 @@
+# Amiaire Project
+
+Amiaire is a Python-based project for analyzing air quality by processing images of sensor papers. It extracts Regions of Interest (ROI), preprocesses these images, analyzes particulate matter, and estimates pollution levels based on correlations with reference sensor data.
+
+## Features
+
+* ROI extraction from sensor paper images.
+* Image preprocessing pipeline (grayscale conversion, background improvement, CLAHE, thresholding).
+* Particle detection and analysis (number of contours, area, area percentage).
+* Correlation analysis with reference sensor data (PM10, PM2.5) using linear regression.
+* Estimation of pollution concentration and classification into pollution levels.
+
+## Project Structure
+
+Amiaire_V2.0/
+├── data/                     # Input data (sample images, calibration CSVs)
+├── output/                   # Generated outputs (processed images, regression models)
+├── amiaire/                  # Main Python package
+│   ├── main.py               # Main script for image analysis pipeline
+│   ├── config.py             # Configurations
+│   ├── roi.py                # ROI extraction
+│   ├── preprocessing.py      # Image preprocessing
+│   ├── analysis.py           # Particle and pollution analysis
+│   ├── correlation.py        # Correlation model training
+│   └── plotting.py           # Plotting utilities
+└── scripts/
+└── train_correlation_models.py # Script to train correlation models
+
+## Prerequisites
+
+* Python 3.8+
+* See `requirements.txt` for package dependencies.
+
+## Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd Amiaire_V2.0
+    ```
+
+2.  **Create a virtual environment (recommended):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Prepare data:**
+    * Place your input images for analysis in a directory (e.g., `data/input_images/`).
+    * If training correlation models, prepare CSV files (e.g., `pm10_calibration.csv`, `pm25_calibration.csv`) in the `data/` directory. Each CSV should have two columns: `paper_sensor_concentration` and `atmotube_concentration`.
+
+## Usage
+
+### 1. Train Correlation Models (if needed)
+
+This step generates the `output/regression_params.json` file used by the main analysis pipeline.
+
+```bash
+python scripts/train_correlation_models.py 
+ 
+python -m amiaire.main --image_path data/example_image.jpeg --output_dir output/processed_images --model_type PM25 
+ 
+--image_path: Path to the input image.
+--output_dir: Directory to save processed images and results.
+--model_type: Type of pollution model to use for concentration calculation (e.g., "PM10", "PM25"). This must match a key in output/regression_params.json
